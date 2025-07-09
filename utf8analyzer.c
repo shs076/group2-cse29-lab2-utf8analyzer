@@ -7,6 +7,27 @@
 
 
 void utf8(char *str);
+uint8_t is_ascii(char string[]) {
+        int i = 0;
+        while(string[i] != '\0') {
+                if((unsigned char)string[i] > 127){
+                        return 0;
+                }
+                i++;
+        }
+        return 1;
+}
+
+int32_t capitalize_ascii(char str[]) {
+        int i = 0;
+        while(str[i] != '\0'){
+                if(str[i] >= 'a' && str[i] <= 'z'){
+                        str[i] = str[i] - 32;
+                }
+                i++;
+        }
+        return i;
+}
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
@@ -14,6 +35,28 @@ int main(int argc, char *argv[]) {
         return 1;
     }        
          utf8(argv[1]);
+    char buffer[100];
+    uint8_t ascii_result;
+    int32_t length;
+        while(1) {
+                char* maybe_eof = fgets(buffer, 99, stdin);
+                if(maybe_eof == NULL) { break; }
+                char* newline = strchr(buffer, '\n');
+                if (newline) *newline = '\0';
+                ascii_result = is_ascii(buffer);
+                capitalize_ascii(buffer);
+                length = strlen(buffer);
+
+                if (ascii_result) {
+                    printf("Valid ASCII: true\n");
+                }
+                else {
+                    printf("Valid ASCII: false\n");
+                }
+                printf("Uppercased ASCII: %s\n", buffer);
+                printf("Length in bytes: %d\n", length);
+
+        }
          return 0;
     }
    
@@ -54,6 +97,7 @@ void utf8(char *str) {
 
     printf("Total UTF-8 codepoints: %d\n", total_codepoints);
 }
+
 
 
 // The program should take a UTF-8 encoded string as input and print out the following information in the terminal:
